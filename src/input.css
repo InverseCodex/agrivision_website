@@ -1,0 +1,15 @@
+@import "tailwindcss";
+
+@theme {
+          --color-background: #111614;      
+          --color-cardBackground: #1a1f1d;    
+          --color-cardOutline: #2e3533;      
+          --color-buttonHover: #23b667e6;   
+          --color-buttonActive: #23b667;      
+          --color-buttonOutline: #292e2d;  
+          --color-buttonHoverOutline: #22C35D;   
+          --color-flavorText: #f0f2f0;
+          --color-buttonBase: #34d399;
+          --color-buttonGlow: #23b667;
+          --color-secondaryColor: #4a3424;
+}

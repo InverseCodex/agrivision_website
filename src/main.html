@@ -1,0 +1,142 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="./output.css" rel="stylesheet">
+
+  <!-- Leaflet -->
+   <style>
+    .leaflet-container {
+      height: 400px;
+      max-width: 100%;
+      max-height: 100%;
+      
+    }
+
+    #map1, #map2 {
+      height: 600px;
+    }
+   </style>
+   <link rel="stylesheet" href="leaflet/leaflet.css" />
+   <script src="leaflet/leaflet.js"></script>
+
+</head>
+
+<body class="bg-background min-h-screen flex flex-col items-center justify-center w-full">
+    
+  <header class="flex flex-row w-full h-20 items-center bg-cardBackground border-b-1 border-cardOutline">
+    <main class="hidden sm:flex w-1/4 ml-5 mt-10rounded-3xl justify-center items-center margin">
+      <a href="index.html">
+        <div class="flex flex-row items-center">
+          <img src="../assets/icon.png" alt="AgriVision Icon" class="w-8 h-8">
+          <h1 class="text-xl font-[Poppins] font-extrabold text-green-600">AgriVision</h1>
+        </div>
+      </a>
+    </main>
+
+    <div class="sm:hidden flex ">
+      <button id="ham_button" class="ml-10 text-background bg-buttonBase border-1 border-buttonHoverOutline font-bold p-2 rounded-md">MENU</button>
+    </div>
+
+    <div class="xl:ml-80 2xl:ml-100 xl:flex hidden flex-row">
+      <div class="flex flex-row">
+        <h1 class="text-white">Connection Status:</h1>
+        <p id="connection_status" class="ml-3 text-white rounded-lg bg-red-500 px-2">Disconnected</p>
+      </div>
+
+      <div class="xl:ml-10 xl:flex hidden flex-row ml-30">
+        <h1 class="text-white">Session Status</h1>
+        <p id="session_status" class="ml-3 text-black rounded-lg bg-gray-300 px-2">Inactive</p>
+      </div>
+
+    </div>
+  </header>
+
+  <div class="flex flex-row w-screen h-screen align-center justify-center content-start">
+    <div id="navbar-section" class="absolute left-0 sm:relative hidden sm:flex flex-col w-5/6 sm:w-2/12 h-screen bg-cardBackground">
+      <div>
+        <button id="connect_rpi_button" class="z-50 bg-black w-full h-24  text-white hover:bg-black hover:cursor-pointer">Connect to a Raspberry Pi</button> <!--This is what an active button classes should be like-->
+        <button id="view_mission_button" class="bg-cardBackground w-full h-24 text-white hover:bg-black hover:cursor-pointer">View Current Mission</button> <!-- This is what an inactive button classes should be like -->
+        <button id="view_result_button" class="bg-cardBackground w-full h-24 text-white hover:bg-black hover:cursor-pointer">View Current Results</button>
+        <button id="load_result_button" class="bg-cardBackground w-full h-24 text-white hover:bg-black hover:cursor-pointer">Load Previous Result</button>
+      </div>
+    </div>
+
+    <div id="content-section" class="flex flex-col justify-center items-center px-6 w-5/6 h-full bg-background border-1 border-cardOutline">
+      <div id="title_section" class="flex flex-col w-full h-32 bg-cardBackground rounded-lg my-4">
+
+        <div id="connect_rpi_title" class="p-3 px-4">
+          <h1 class="text-white font-bold text-md sm:text-xl">Connect to a Raspberry Pi</h1>
+          <p class="text-white text-sm sm:text-xl">Allows the user to connect to a Raspberry Pi in the same network</p>
+        </div>
+
+        <div id="view_mission_title" class="p-3 px-4 hidden">
+          <h1 class="text-white font-bold text-md sm:text-xl">View Mission</h1>
+          <p class="text-white text-sm sm:text-xl">View the current mission</p>
+        </div>
+
+        <div id="view_result_title" class="p-3 px-4 hidden">
+          <h1 class="text-white font-bold text-md sm:text-xl">View Current Mission</h1>
+          <p class="text-white text-sm sm:text-xl">Live Data from the Mission is Highlighted in the Map</p>
+        </div>
+        
+        <div id="load_result_tile" class="p-3 px-4 hidden">
+          <h1 class="text-white font-bold text-md sm:text-xl">Load Previous Results</h1>
+          <div class="mt-4">
+            <label for="disease_json" class="text-white font-semibold">Upload Disease Data (.json):</label>
+            <input type="file" id="disease_json" accept="application/json" class="ml-2 p-2 rounded bg-gray-800 text-white" />
+          </div>
+        </div>
+      </div>
+
+      <div id="content-window" class="flex flex-col w-full h-full bg-cardBackground rounded-lg">
+        
+        <div id="connect_rpi_content" class="flex flex-col w-full h-full items-center justify-center">
+            <h1 class="text-white my-4 font-extrabold text-md sm:text-2xl">Not Connected to a Raspberry Pi yet.</h1>
+            <div id="not_connected">
+                  <button class="relative overflow-hidden bg-gradient-to-t from-buttonBase to-buttonHover drop-shadow-xl/40 drop-shadow-buttonGlow
+                  bg-[length:100%_200%] bg-bottom
+                  ring-1 ring-buttonOutline 
+                  p-6 rounded-lg 
+                text-background font-bold 
+                  cursor-pointer
+                  transition-all duration-700 ease-in-out 
+                  hover:bg-top hover:text-white
+                  z-30">
+                  Connect Now
+                  </button>
+            </div>>
+        </div>
+
+        <div id="view_mission_content" class="h-full w-full flex flex-col items-center justify-center">
+            <h1 class="text-white font-bold text-md sm:text-2xl">No Mission Active</h1>
+        </div>
+
+        <div id="view_result_content" class="hidden">
+            <div id="map1" class="w-full"></div>
+        </div>
+
+        <div id="load_result_content" class="hidden">
+            <div id="map2" class="w-full"></div>
+        </div>
+
+        </div>
+        
+    </div>
+
+    <script src="navbar.js"></script>
+    <script src="leafmap.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        var hamBtn = document.getElementById('ham_button');
+        var navbar = document.getElementById('navbar-section');
+        if (hamBtn && navbar) {
+          hamBtn.addEventListener('click', function() {
+            navbar.classList.toggle('hidden');
+          });
+        }
+      });
+    </script>
+</body>
+</html>
